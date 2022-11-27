@@ -17,6 +17,9 @@ class EspaceController extends AbstractController
     public function ajouterEspace(ManagerRegistry $doctrine, Request $request): Response
     {
         $espace = new Espace();
+
+        // TODO : date de fermeture ne doit être remplie que si la date d’ouverture est également remplie et doit bien sûr être supérieure
+
         $form = $this->createForm(EspaceType::class, $espace);
         $form->handleRequest($request);
 

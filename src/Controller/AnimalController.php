@@ -32,6 +32,13 @@ class AnimalController extends AbstractController
     public function ajouterAnimal(ManagerRegistry $doctrine, Request $request)
     {
         $animal = new Animal();
+
+        // TODO : numéro d’identification a toujours exactement 14 chiffres
+        // TODO : vérifier que l'enclos n'est pas plein
+        // TODO : date de naissance ne doit pas être supérieure à la date d’arrivée au zoo
+        // TODO : date de départ doit être supérieure à la date d’arrivée
+        // TODO : ne peut pas stérilisé si sexe non déterminé
+
         $form = $this->createForm(AnimalType::class, $animal);
         $form->handleRequest($request);
 
@@ -53,6 +60,10 @@ class AnimalController extends AbstractController
         if (!$animal) {
             throw $this->createNotFoundException("Aucun animal avec l'id $id");
         }
+
+        // TODO : vérifier que l'enclos n'est pas plein
+        // TODO : La date de naissance ne doit pas être supérieure à la date d’arrivée au zoo.
+        // TODO : ne peut pas stérilisé si sexe non déterminé
 
         $form = $this->createForm(AnimalType::class, $animal);
         $form->handleRequest($request);
