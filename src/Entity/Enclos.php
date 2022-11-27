@@ -3,8 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\EnclosRepository;
-use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: EnclosRepository::class)]
@@ -22,12 +22,16 @@ class Enclos
     private ?int $superficie = null;
 
     #[ORM\Column]
-    private ?int $nombre_max_animaux = null;
+    private ?int $nombre_max_animal = null;
 
     #[ORM\Column]
     private ?bool $quarantaine = null;
 
-    #[ORM\OneToMany(mappedBy: 'Enclos', targetEntity: Animal::class, orphanRemoval: true)]
+    #[ORM\ManyToOne(inversedBy: 'enclos')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Espace $Espace = null;
+
+    #[ORM\OneToMany(mappedBy: 'Enclos', targetEntity: Animal::class, orphanRemoval: false)]
     private Collection $animaux;
 
     public function __construct()
@@ -64,14 +68,14 @@ class Enclos
         return $this;
     }
 
-    public function getNombreMaxAnimaux(): ?int
+    public function getNombreMaxAnimal(): ?int
     {
-        return $this->nombre_max_animaux;
+        return $this->nombre_max_animal;
     }
 
-    public function setNombreMaxAnimaux(int $nombre_max_animaux): self
+    public function setNombreMaxAnimal(int $nombre_max_animal): self
     {
-        $this->nombre_max_animaux = $nombre_max_animaux;
+        $this->nombre_max_animal = $nombre_max_animal;
 
         return $this;
     }
@@ -84,6 +88,18 @@ class Enclos
     public function setQuarantaine(bool $quarantaine): self
     {
         $this->quarantaine = $quarantaine;
+
+        return $this;
+    }
+
+    public function getEspace(): ?Espace
+    {
+        return $this->Espace;
+    }
+
+    public function setEspace(?Espace $Espace): self
+    {
+        $this->Espace = $Espace;
 
         return $this;
     }

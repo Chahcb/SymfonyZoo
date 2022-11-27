@@ -1,0 +1,13 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Ajouter un enclos{% endblock %}
+
+{% block body %}
+    <div class="container">
+        <div class="example-wrapper">
+            <h1>Ajouter un enclos</h1>
+            {{ form(formulaire) }}
+            <a href="{{ path("app_home") }}" class="btn btn-warning px-4"><span class="fa-solid fa-backward"></span>  Retour</a>
+        </div>
+    </div>
+{% endblock %}

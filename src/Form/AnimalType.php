@@ -28,16 +28,17 @@ class AnimalType extends AbstractType
                     'mâle' => 'mâle',
                     'femelle' => 'femelle',
                     'non déterminé' => 'non déterminé'
-                ]])
-            ->add('sterilise')
+                ],
+            ])
             ->add('quarantaine')
             ->add('Enclos', EntityType::class, [
                 'class' => Enclos::class, // choix de la classe liée
                 'choice_label' => 'nom', // choix de ce qui sera affiché comme texte
                 'multiple' => false,
                 'expanded' => false])
-            ->add('OK', SubmitType::class, ["label" => "OK",
-                'attr' => ['class' => 'btn btn-primary px-3']]);;
+            ->add('OK', SubmitType::class, ['label' => 'OK',
+                'attr' => ['class' => 'btn btn-primary px-5']]);
+        ;
     }
 
     public function configureOptions(OptionsResolver $resolver): void

@@ -14,7 +14,7 @@ class Animal
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column(length: 30, nullable: true)]
+    #[ORM\Column(length: 50, nullable: true)]
     private ?string $nom = null;
 
     #[ORM\Column(type: Types::DATE_MUTABLE, nullable: true)]
@@ -35,11 +35,8 @@ class Animal
     #[ORM\Column(length: 50)]
     private ?string $espece = null;
 
-    #[ORM\Column(length: 20)]
+    #[ORM\Column(length: 50)]
     private ?string $sexe = null;
-
-    #[ORM\Column]
-    private ?bool $sterilise = null;
 
     #[ORM\Column]
     private ?bool $quarantaine = null;
@@ -145,18 +142,6 @@ class Animal
     public function setSexe(string $sexe): self
     {
         $this->sexe = $sexe;
-
-        return $this;
-    }
-
-    public function isSterilise(): ?bool
-    {
-        return $this->sterilise;
-    }
-
-    public function setSterilise(bool $sterilise): self
-    {
-        $this->sterilise = $sterilise;
 
         return $this;
     }

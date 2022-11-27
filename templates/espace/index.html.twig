@@ -1,39 +1,44 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Enclos de l'espace {{ espace.nom }}{% endblock %}
+{% block title %}Gestion du ZOO{% endblock %}
 
 {% block body %}
 
     <div class="container">
         <div class="example-wrapper">
-            <h1>Les enclos de l'espace <i>{{ espace.nom }}</i></h1>
+            <h1>Gestion du ZOO</h1>
+            <h2>Les espaces</h2>
             <table class="table table-striped">
                 <tr>
                     <th>Nom</th>
                     <th>Superficie</th>
                     <th></th>
                 </tr>
-                {% for e in enclos %}
+                {% for es in espace %}
                     <tr>
-                        <td>{{ e.nom }}</td>
-                        <td>{{ e.superficie }} m2</td>
+                        <td>{{ es.nom }}</td>
+                        <td>{{ es.superficie }} m2</td>
                         <td style="width:15rem">
-                            <a href="{{ path("voir_animaux",{"idEnclos":e.id}) }}"
+                            <a href="{{ path("voir_enclos",{"idEspace":es.id}) }}"
                                class="btn btn btn-primary"><span class="fa-solid fa-eye"></span>
                             </a>
-                            <a href="{{ path("animal_ajouter") }}" class="btn btn btn-success">
+                            <a href="{{ path("enclos_ajouter") }}" class="btn btn btn-success">
                                 <span class="fa-solid fa-plus"></span>
                             </a>
-                            <a href="{{ path("enclos_modifier",{"id":e.id}) }}" class="btn btn btn-warning">
+                            <a href="{{ path("espace_modifier",{"id":es.id}) }}" class="btn btn btn-warning">
                                 <span class="fa-solid fa-pen-to-square"></span>
                             </a>
-                            <a href="{{ path("enclos_supprimer",{"id":e.id}) }}" class="btn btn btn-danger">
+                            <a href="{{ path("espace_supprimer",{"id":es.id}) }}" class="btn btn btn-danger">
                                 <span class="fa-solid fa-trash-can"></span>
                             </a>
                         </td>
                     </tr>
                 {% endfor %}
             </table>
+
+            <h2>Ajouter un espace</h2>
+            {{ form(formulaire) }}
+
         </div>
     </div>
 

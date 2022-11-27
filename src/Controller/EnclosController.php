@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Enclos;
+use App\Entity\Espace;
 use App\Form\EnclosSupprimerType;
 use App\Form\EnclosType;
 use Doctrine\Persistence\ManagerRegistry;
@@ -13,7 +14,21 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class EnclosController extends AbstractController
 {
-    #[Route('/', name: 'app_home')]
+    #[Route('/lesEnclos/{idEspace}', name: 'voir_enclos')]
+    public function voirEnclosEspace($idEspace, ManagerRegistry $doctrine): Response
+    {
+        $espace = $doctrine->getRepository(Espace::class)->find($idEspace);
+        if (!$espace) {
+            throw $this->createNotFoundException("Aucun espace avec l'id $idEspace");
+        }
+
+        return $this->render('enclos/index.html.twig', [
+            'espace' => $espace,
+            'enclos' => $espace->getEnclos()
+        ]);
+    }
+
+    #[Route('/enclos/ajouter', name: 'enclos_ajouter')]
     public function ajouterEnclos(ManagerRegistry $doctrine, Request $request): Response
     {
         $enclos = new Enclos();
@@ -29,7 +44,7 @@ class EnclosController extends AbstractController
         $repo = $doctrine->getRepository(Enclos::class);
         $enclos = $repo->findAll();
 
-        return $this->render('enclos/index.html.twig', [
+        return $this->render('enclos/ajouterEnclos.html.twig', [
             'enclos' => $enclos,
             'formulaire' => $form->createView()
         ]);
@@ -40,9 +55,8 @@ class EnclosController extends AbstractController
     {
         $enclos = $doctrine->getRepository(Enclos::class)->find($id);
 
-        //si on n'a rien trouvé -> 404
         if (!$enclos) {
-            throw $this->createNotFoundException("Aucune catégorie avec l'id $id");
+            throw $this->createNotFoundException("Aucun enclos avec l'id $id");
         }
 
         $form = $this->createForm(EnclosType::class, $enclos);
@@ -67,7 +81,7 @@ class EnclosController extends AbstractController
         $enclos = $doctrine->getRepository(Enclos::class)->find($id);
 
         if (!$enclos) {
-            throw $this->createNotFoundException("Aucune catégorie avec l'id $id");
+            throw $this->createNotFoundException("Aucun enclos avec l'id $id");
         }
 
         $form = $this->createForm(EnclosSupprimerType::class, $enclos);
@@ -77,7 +91,7 @@ class EnclosController extends AbstractController
             $em = $doctrine->getManager();
             $em->remove($enclos);
             $em->flush();
-            return $this->redirectToRoute("app_home");
+            return $this->redirectToRoute("enclos");
         }
 
         return $this->render("enclos/supprimerEnclos.html.twig", [
