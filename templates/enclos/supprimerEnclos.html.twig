@@ -3,16 +3,11 @@
 {% block title %}Suppression de {{ enclos.nom }}{% endblock %}
 
 {% block body %}
-
     <div class="px-4 py-5 my-5 text-center">
-
         <img src="https://cdn-icons-png.flaticon.com/512/5190/5190782.png" width="50" height="50" alt="logo ZooWorld">
         <h1 class="display-5 fw-bold">Supprimer l'enclos {{ enclos.nom }}</h1>
-
         <div class="col-lg-6 mx-auto">
-
             <p class="lead mb-4">Êtes-vous bien sûr de vouloir supprimer l'enclos <i>{{ enclos.nom }}</i> ?</p>
-
             <div class="d-grid gap-2 d-sm-flex justify-content-sm-center">
                 <a href="{{ path("app_home") }}" class="btn btn-warning btn-lg gap-3">
                     <span class="fa-solid fa-backward"></span> Retour
@@ -21,5 +16,4 @@
             </div>
         </div>
     </div>
-
 {% endblock %}

@@ -49,6 +49,11 @@ class AnimalController extends AbstractController
     public function modifierAnimal($id, ManagerRegistry $doctrine, Request $request)
     {
         $animal = $doctrine->getRepository(Animal::class)->find($id);
+
+        if (!$animal) {
+            throw $this->createNotFoundException("Aucun animal avec l'id $id");
+        }
+
         $form = $this->createForm(AnimalType::class, $animal);
         $form->handleRequest($request);
 
@@ -71,7 +76,7 @@ class AnimalController extends AbstractController
         $animal = $doctrine->getRepository(Animal::class)->find($id);
 
         if (!$animal) {
-            throw $this->createNotFoundException("Aucun enclos avec l'id $id");
+            throw $this->createNotFoundException("Aucun animal avec l'id $id");
         }
 
         $form = $this->createForm(AnimalSupprimerType::class, $animal);

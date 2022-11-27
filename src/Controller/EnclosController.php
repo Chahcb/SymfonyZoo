@@ -39,6 +39,7 @@ class EnclosController extends AbstractController
             $em = $doctrine->getManager();
             $em->persist($enclos);
             $em->flush();
+            return $this->redirectToRoute("voir_enclos", ["idEspace" => $enclos->getEspace()->getId()]);
         }
 
         $repo = $doctrine->getRepository(Enclos::class);
@@ -66,7 +67,7 @@ class EnclosController extends AbstractController
             $em = $doctrine->getManager();
             $em->persist($enclos);
             $em->flush();
-            return $this->redirectToRoute("app_home");
+            return $this->redirectToRoute("voir_enclos", ["idEspace" => $enclos->getEspace()->getId()]);
         }
 
         return $this->render("enclos/modifierEnclos.html.twig", [
@@ -91,7 +92,7 @@ class EnclosController extends AbstractController
             $em = $doctrine->getManager();
             $em->remove($enclos);
             $em->flush();
-            return $this->redirectToRoute("enclos");
+            return $this->redirectToRoute("voir_enclos", ["idEspace" => $enclos->getEspace()->getId()]);
         }
 
         return $this->render("enclos/supprimerEnclos.html.twig", [
