@@ -1,0 +1,38 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Enclos de l'espace {{ espace.nom }}{% endblock %}
+
+{% block body %}
+    <div class="container">
+        <div class="example-wrapper">
+            <h1>Les enclos de l'espace <i>{{ espace.nom }}</i></h1>
+            <table class="table table-striped">
+                <tr>
+                    <th>Nom</th>
+                    <th>Superficie</th>
+                    <th></th>
+                </tr>
+                {% for e in enclos %}
+                    <tr>
+                        <td>{{ e.nom }}</td>
+                        <td>{{ e.superficie }} m2</td>
+                        <td style="width:15rem">
+                            <a href="{{ path("voir_animaux",{"idEnclos":e.id}) }}"
+                               class="btn btn btn-primary"><span class="fa-solid fa-eye"></span>
+                            </a>
+                            <a href="{{ path("animal_ajouter") }}" class="btn btn btn-success">
+                                <span class="fa-solid fa-plus"></span>
+                            </a>
+                            <a href="{{ path("enclos_modifier",{"id":e.id}) }}" class="btn btn btn-warning">
+                                <span class="fa-solid fa-pen-to-square"></span>
+                            </a>
+                            <a href="{{ path("enclos_supprimer",{"id":e.id}) }}" class="btn btn btn-danger">
+                                <span class="fa-solid fa-trash-can"></span>
+                            </a>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </table>
+        </div>
+    </div>
+{% endblock %}
