@@ -35,13 +35,21 @@ class AnimalController extends AbstractController
 
         // TODO : numéro d’identification a toujours exactement 14 chiffres
         // TODO : vérifier que l'enclos n'est pas plein
-        // TODO : date de naissance ne doit pas être supérieure à la date d’arrivée au zoo
-        // TODO : date de départ doit être supérieure à la date d’arrivée
 
         $form = $this->createForm(AnimalType::class, $animal);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+
+            // date de naissance ne doit pas être supérieure à la date d’arrivée au zoo
+            if ($form->get('date_naissance')->getData() >= $form->get('date_arrivee')->getData()) {
+                throw $this->createNotFoundException("date de naissance doit être antérieure à la date d’arrivée");
+            }
+
+            // date de départ doit être supérieure à la date d’arrivée
+            if ($form->get('date_depart')->getData() <= $form->get('date_arrivee')->getData()) {
+                throw $this->createNotFoundException("date de départ doit être antérieure à la date d’arrivée");
+            }
 
             // on ne peut pas stérilisé l'animal si son sexe est non déterminé
             if ($form->get('sexe')->getData() == 'non déterminé' && $form->get('sterilise')->getData() == True) {
@@ -67,12 +75,21 @@ class AnimalController extends AbstractController
         }
 
         // TODO : vérifier que l'enclos n'est pas plein
-        // TODO : La date de naissance ne doit pas être supérieure à la date d’arrivée au zoo.
 
         $form = $this->createForm(AnimalType::class, $animal);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+
+            // date de naissance ne doit pas être supérieure à la date d’arrivée au zoo
+            if ($form->get('date_naissance')->getData() >= $form->get('date_arrivee')->getData()) {
+                throw $this->createNotFoundException("date de naissance doit être antérieure à la date d’arrivée");
+            }
+
+            // date de départ doit être supérieure à la date d’arrivée
+            if ($form->get('date_depart')->getData() <= $form->get('date_arrivee')->getData()) {
+                throw $this->createNotFoundException("date de départ doit être antérieure à la date d’arrivée");
+            }
 
             // on ne peut pas stérilisé l'animal si son sexe est non déterminé
             if ($form->get('sexe')->getData() == 'non déterminé' && $form->get('sterilise')->getData() == True) {
