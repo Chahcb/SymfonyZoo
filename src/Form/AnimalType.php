@@ -42,6 +42,7 @@ class AnimalType extends AbstractType
                     'non déterminé' => 'non déterminé'
                 ],
             ])
+            ->add('sterilise')
             ->add('quarantaine')
             ->add('Enclos', EntityType::class, [
                 'class' => Enclos::class, // choix de la classe liée

@@ -37,12 +37,17 @@ class AnimalController extends AbstractController
         // TODO : vérifier que l'enclos n'est pas plein
         // TODO : date de naissance ne doit pas être supérieure à la date d’arrivée au zoo
         // TODO : date de départ doit être supérieure à la date d’arrivée
-        // TODO : ne peut pas stérilisé si sexe non déterminé
 
         $form = $this->createForm(AnimalType::class, $animal);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+
+            // on ne peut pas stérilisé l'animal si son sexe est non déterminé
+            if ($form->get('sexe')->getData() == 'non déterminé' && $form->get('sterilise')->getData() == True) {
+                throw $this->createNotFoundException("Tu ne peux pas stérilisé l'animal si son son sexe est indéterminé");
+            }
+
             $em = $doctrine->getManager();
             $em->persist($animal);
             $em->flush();
@@ -63,12 +68,17 @@ class AnimalController extends AbstractController
 
         // TODO : vérifier que l'enclos n'est pas plein
         // TODO : La date de naissance ne doit pas être supérieure à la date d’arrivée au zoo.
-        // TODO : ne peut pas stérilisé si sexe non déterminé
 
         $form = $this->createForm(AnimalType::class, $animal);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+
+            // on ne peut pas stérilisé l'animal si son sexe est non déterminé
+            if ($form->get('sexe')->getData() == 'non déterminé' && $form->get('sterilise')->getData() == True) {
+                throw $this->createNotFoundException("Tu ne peux pas stérilisé l'animal si son son sexe est indéterminé");
+            }
+
             $em = $doctrine->getManager();
             $em->persist($animal);
             $em->flush();
