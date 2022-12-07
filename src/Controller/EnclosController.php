@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\Animal;
 use App\Entity\Enclos;
 use App\Entity\Espace;
 use App\Form\EnclosSupprimerType;
@@ -87,12 +88,16 @@ class EnclosController extends AbstractController
     public function supprimerEnclos($id, ManagerRegistry $doctrine, Request $request)
     {
         $enclos = $doctrine->getRepository(Enclos::class)->find($id);
+        $animaux = $doctrine->getRepository(Animal::class)->find($id);
 
         if (!$enclos) {
             throw $this->createNotFoundException("Aucun enclos avec l'id $id");
         }
 
-        // TODO : vérifier que l'enclos est vide, qu'il n'y a pas d'animaux pour le supprimer
+        // si l'enclos n'est vide pas vide on peut pas le supprimer
+        if ($animaux) {
+            throw $this->createNotFoundException("L'enclos n'est pas vide");
+        }
 
         $form = $this->createForm(EnclosSupprimerType::class, $enclos);
         $form->handleRequest($request);
