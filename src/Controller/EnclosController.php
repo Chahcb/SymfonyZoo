@@ -59,19 +59,29 @@ class EnclosController extends AbstractController
     #[Route('/enclos/modifier/{id}', name: 'enclos_modifier')]
     public function modifierEnclos($id, ManagerRegistry $doctrine, Request $request)
     {
+        $animaux = $doctrine->getRepository(Animal::class)->findBy(array('Enclos' => $id));
         $enclos = $doctrine->getRepository(Enclos::class)->find($id);
 
         if (!$enclos) {
             throw $this->createNotFoundException("Aucun enclos avec l'id $id");
         }
-
-        // TODO : enclos en placé en quarantaine, tous les animaux qu’il contient doivent automatiquement être mis en quarantaine
         // TODO : Lorsque que le dernier animal de l’enclos sort de quarantaine, l’enclos doit lui-même ne plus être en quarantaine
 
         $form = $this->createForm(EnclosType::class, $enclos);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+
+            // l'enclos est placé en quarantaine, alors tous les animaux qu’il contient sont mis en quarantaine
+            if ($form->get('quarantaine')->getData()) {
+                foreach ($animaux as $a) {
+                    $a->setQuarantaine(True);
+                    $em = $doctrine->getManager();
+                    $em->persist($a);
+                    $em->flush();
+                }
+            }
+
             $em = $doctrine->getManager();
             $em->persist($enclos);
             $em->flush();

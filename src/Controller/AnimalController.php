@@ -31,11 +31,9 @@ class AnimalController extends AbstractController
     #[Route('/animal/ajouter', name: 'animal_ajouter')]
     public function ajouterAnimal(ManagerRegistry $doctrine, Request $request)
     {
-        $animal = new Animal();
-
         // TODO : numéro d’identification a toujours exactement 14 chiffres
-        // TODO : vérifier que l'enclos n'est pas plein
 
+        $animal = new Animal();
         $form = $this->createForm(AnimalType::class, $animal);
         $form->handleRequest($request);
 
@@ -52,8 +50,14 @@ class AnimalController extends AbstractController
             }
 
             // on ne peut pas stérilisé l'animal si son sexe est non déterminé
-            if ($form->get('sexe')->getData() == 'non déterminé' && $form->get('sterilise')->getData() == True) {
+            if ($form->get('sexe')->getData() == 'non déterminé' && $form->get('sterilise')->getData()) {
                 throw $this->createNotFoundException("Tu ne peux pas stérilisé l'animal si son son sexe est indéterminé");
+            }
+
+            // l'enclos est placé en quarantaine, alors l'animal est mis en quarantaine
+            $enclos = $doctrine->getRepository(Enclos::class)->find($form->get('Enclos')->getData());
+            if ($enclos->isQuarantaine()) {
+                $animal->setQuarantaine(True);
             }
 
             $em = $doctrine->getManager();

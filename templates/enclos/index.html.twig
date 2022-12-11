@@ -3,6 +3,20 @@
 {% block title %}Enclos de l'espace {{ espace.nom }}{% endblock %}
 
 {% block body %}
+    <div class="px-4 py-5 my-5 text-center">
+        <img src="https://cdn-icons-png.flaticon.com/512/5190/5190782.png" width="50" height="50" alt="logo ZooWorld">
+        <h1 class="display-5 fw-bold">Enclos de l'espace <i>{{ espace.nom }}</i></h1>
+        <div class="col-lg-6 mx-auto">
+            <p class="lead mb-4">Affichage des enclos de l'espace <i>{{ espace.nom }}</i></p>
+            <div class="d-grid gap-2 d-sm-flex justify-content-sm-center">
+                <a href="{{ path("app_home") }}" class="btn btn-warning btn-lg px-4 gap-3"><span
+                            class="fa-solid fa-backward"></span> Retour</a>
+                <a href="{{ path("enclos_ajouter") }}" class="btn btn-success btn-lg px-4 gap-3"><span
+                            class="fa-solid fa-plus"></span> Ajouter</a>
+            </div>
+        </div>
+    </div>
+
     <div class="container">
         <div class="example-wrapper">
             <h1>Les enclos de l'espace <i>{{ espace.nom }}</i></h1>
@@ -21,10 +35,10 @@
                                class="btn btn btn-primary"><span class="fa-solid fa-eye"></span>
                             </a>
                             <a href="{{ path("animal_ajouter") }}" class="btn btn btn-success">
-                                <span class="fa-solid fa-plus"></span>
+                                <span class="fa-solid fa-hippo"></span>
                             </a>
                             <a href="{{ path("enclos_modifier",{"id":e.id}) }}" class="btn btn btn-warning">
-                                <span class="fa-solid fa-pen-to-square"></span>
+                                <span class="fa-solid fa-pen"></span>
                             </a>
                             <a href="{{ path("enclos_supprimer",{"id":e.id}) }}" class="btn btn btn-danger">
                                 <span class="fa-solid fa-trash-can"></span>
