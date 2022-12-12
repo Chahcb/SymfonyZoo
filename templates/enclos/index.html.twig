@@ -24,12 +24,14 @@
                 <tr>
                     <th>Nom</th>
                     <th>Superficie</th>
+                    <th>Nombre d'animaux</th>
                     <th></th>
                 </tr>
                 {% for e in enclos %}
                     <tr>
                         <td>{{ e.nom }}</td>
                         <td>{{ e.superficie }} m2</td>
+                        <td>{{ e.nombreMaxAnimal }}</td>
                         <td style="width:15rem">
                             <a href="{{ path("voir_animaux",{"idEnclos":e.id}) }}"
                                class="btn btn btn-primary"><span class="fa-solid fa-eye"></span>

@@ -24,7 +24,11 @@
                     <div class="col">
                         <div class="card shadow-sm">
                             <div class="card-body">
-                                <h2 class="card-title">{{ a.nom }}</h2>
+                                <h2 class="card-title"><span class="fa-solid fa-star"></span>  {{ a.nom }}</h2>
+                                <h6 class="card-title"><span class="fa-solid fa-cake-candles"></span>  né(e) le {{ a.dateNaissance|date('d/m/Y') }}</h6>
+                                <h6 class="card-title"><span class="fa-solid fa-calendar-days"></span>  arrivé(e) le {{ a.dateArrivee|date('d/m/Y') }}</h6>
+                                <h6 class="card-title"><span class="fa-solid fa-calendar-days"></span>  part le {{ a.dateDepart|date('d/m/Y') }}</h6>
+                                <h6 class="card-title"><span class="fa-solid fa-venus-mars"></span>  {{ a.sexe }}</h6>
                                 <a href="{{ path("animal_modifier",{"id":a.id}) }}" class="btn btn btn-warning">
                                     <span class="fa-solid fa-pen"></span></a>
                                 <a href="{{ path("animal_supprimer",{"id":a.id}) }}" class="btn btn-danger">
