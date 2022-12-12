@@ -54,8 +54,16 @@ class AnimalController extends AbstractController
                 throw $this->createNotFoundException("Tu ne peux pas stérilisé l'animal si son son sexe est indéterminé");
             }
 
-            // l'enclos est placé en quarantaine, alors l'animal est mis en quarantaine
             $enclos = $doctrine->getRepository(Enclos::class)->find($form->get('Enclos')->getData());
+            $animaux = $doctrine->getRepository(Animal::class)->findBy(array('Enclos' =>$form->get('Enclos')->getData()));
+
+            // On ne doit pas pouvoir ajouter plus d’animaux à l’enclos qu’il ne peut en contenir
+            $nombreAnimauxEnclos = count($animaux);
+            if ($nombreAnimauxEnclos == $enclos->getNombreMaxAnimal()) {
+                throw $this->createNotFoundException("Dommage l'enclos est plein :|");
+            }
+
+            // l'enclos est placé en quarantaine, alors l'animal est mis en quarantaine
             if ($enclos->isQuarantaine()) {
                 $animal->setQuarantaine(True);
             }
@@ -96,7 +104,7 @@ class AnimalController extends AbstractController
             }
 
             // on ne peut pas stérilisé l'animal si son sexe est non déterminé
-            if ($form->get('sexe')->getData() == 'non déterminé' && $form->get('sterilise')->getData() == True) {
+            if ($form->get('sexe')->getData() == 'non déterminé' && $form->get('sterilise')->getData()) {
                 throw $this->createNotFoundException("Tu ne peux pas stérilisé l'animal si son son sexe est indéterminé");
             }
 

@@ -66,7 +66,7 @@ class EspaceController extends AbstractController
             }
 
             // date de fermeture doit bien sûr être supérieure à la date d'ouverture
-            if ($form->get('date_ouverture')->getData() >= $form->get('date_fermeture')->getData()) {
+            if ($form->get('date_ouverture')->getData() != "" && $form->get('date_ouverture')->getData() >= $form->get('date_fermeture')->getData()) {
                 throw $this->createNotFoundException("La date de fermeture ne peux pas être antérieure à la date d'ouverture");
             }
 
