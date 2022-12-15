@@ -54,12 +54,11 @@ class AnimalController extends AbstractController
                 throw $this->createNotFoundException("Tu ne peux pas stérilisé l'animal si son son sexe est indéterminé");
             }
 
+            $animaux = $doctrine->getRepository(Animal::class)->findBy(array('Enclos' => $form->get('Enclos')->getData()));
             $enclos = $doctrine->getRepository(Enclos::class)->find($form->get('Enclos')->getData());
-            $animaux = $doctrine->getRepository(Animal::class)->findBy(array('Enclos' =>$form->get('Enclos')->getData()));
 
             // On ne doit pas pouvoir ajouter plus d’animaux à l’enclos qu’il ne peut en contenir
-            $nombreAnimauxEnclos = count($animaux);
-            if ($nombreAnimauxEnclos == $enclos->getNombreMaxAnimal()) {
+            if (count($animaux) == $enclos->getNombreMaxAnimal()) {
                 throw $this->createNotFoundException("Dommage l'enclos est plein :|");
             }
 
@@ -85,8 +84,6 @@ class AnimalController extends AbstractController
         if (!$animal) {
             throw $this->createNotFoundException("Aucun animal avec l'id $id");
         }
-
-        // TODO : vérifier que l'enclos n'est pas plein
 
         $form = $this->createForm(AnimalType::class, $animal);
         $form->handleRequest($request);

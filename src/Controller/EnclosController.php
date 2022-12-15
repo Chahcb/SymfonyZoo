@@ -92,15 +92,15 @@ class EnclosController extends AbstractController
     #[Route('/enclos/supprimer/{id}', name: 'enclos_supprimer')]
     public function supprimerEnclos($id, ManagerRegistry $doctrine, Request $request)
     {
+        $animaux = $doctrine->getRepository(Animal::class)->findBy(array('Enclos' => $id));
         $enclos = $doctrine->getRepository(Enclos::class)->find($id);
-        $animaux = $doctrine->getRepository(Animal::class)->find($id);
 
         if (!$enclos) {
             throw $this->createNotFoundException("Aucun enclos avec l'id $id");
         }
 
         // si l'enclos n'est vide pas vide on peut pas le supprimer
-        if ($animaux) {
+        if (count($animaux) != 0) {
             throw $this->createNotFoundException("L'enclos n'est pas vide");
         }
 
