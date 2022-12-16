@@ -22,6 +22,18 @@ class AnimalController extends AbstractController
             throw $this->createNotFoundException("Aucun enclos avec l'id $idEnclos");
         }
 
+        // on verifie si les animaux de l'enclos sont en quarantaine
+        // 1 => True et 0 => False
+        // si oui alors l'enclos reste en quarantaine sinon il ne l'est plus
+        $animauxQuarantaine = count($enclos->getAnimal()->filter(fn($animal) => $animal->isQuarantaine() == 1));
+
+        if ($animauxQuarantaine == 0) {
+            $enclos->setQuarantaine(False);
+            $ema = $doctrine->getManager();
+            $ema->persist($enclos);
+            $ema->flush();
+        }
+
         return $this->render('animaux/index.html.twig', [
             'enclos' => $enclos,
             'animaux' => $enclos->getAnimal()
@@ -36,6 +48,35 @@ class AnimalController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+
+            // la date de naissance ne doit pas être supérieure à la date d’arrivée au zoo
+            if ($form->get('date_naissance')->getData() >= $form->get('date_arrivee')->getData()) {
+                throw $this->createNotFoundException("La date de naissance doit être antérieure à la date d’arrivée");
+            }
+
+            // la date de départ doit être supérieure à la date d’arrivée au zoo
+            if ($form->get('date_depart')->getData() <= $form->get('date_arrivee')->getData()) {
+                throw $this->createNotFoundException("date de départ doit être supérieure à la date d’arrivée");
+            }
+
+            // on ne peut pas stérilisé l'animal si son sexe est indéterminé
+            if ($form->get('sexe')->getData() == 'non déterminé' && $form->get('sterilise')->getData()) {
+                throw $this->createNotFoundException("Tu ne peux pas stériliser l'animal si son sexe est indéterminé");
+            }
+
+            $animaux = $doctrine->getRepository(Animal::class)->findBy(array('Enclos' => $form->get('Enclos')->getData()));
+            $enclos = $doctrine->getRepository(Enclos::class)->find($form->get('Enclos')->getData());
+
+            // On ne doit pas pouvoir ajouter plus d’animaux à l’enclos qu’il ne peut en contenir
+            if (count($animaux) == $enclos->getNombreMaxAnimal()) {
+                throw $this->createNotFoundException("Dommage l'enclos est plein :|");
+            }
+
+            // l'enclos est placé en quarantaine, alors l'animal est mis en quarantaine
+            if ($enclos->isQuarantaine()) {
+                $animal->setQuarantaine(True);
+            }
+
             $em = $doctrine->getManager();
             $em->persist($animal);
             $em->flush();
@@ -58,6 +99,22 @@ class AnimalController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+
+            // la date de naissance ne doit pas être supérieure à la date d’arrivée au zoo
+            if ($form->get('date_naissance')->getData() >= $form->get('date_arrivee')->getData()) {
+                throw $this->createNotFoundException("La date de naissance doit être antérieure à la date d’arrivée");
+            }
+
+            // la date de départ doit être supérieure à la date d’arrivée au zoo
+            if ($form->get('date_depart')->getData() <= $form->get('date_arrivee')->getData()) {
+                throw $this->createNotFoundException("La date de départ doit être supérieure à la date d’arrivée");
+            }
+
+            // on ne peut pas stérilisé l'animal si son sexe est indéterminé
+            if ($form->get('sexe')->getData() == 'non déterminé' && $form->get('sterilise')->getData()) {
+                throw $this->createNotFoundException("Tu ne peux pas steriliser l'animal si son son sexe est indéterminé");
+            }
+
             $em = $doctrine->getManager();
             $em->persist($animal);
             $em->flush();

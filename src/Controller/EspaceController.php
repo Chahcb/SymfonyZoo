@@ -21,6 +21,17 @@ class EspaceController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+
+            // date de fermeture ne doit être remplie que si la date d’ouverture est également remplie
+            if ($form->get('date_ouverture')->getData() == '' && $form->get('date_fermeture')->getData() != '') {
+                throw $this->createNotFoundException("Tu ne peux pas mettre de date de fermeture si la date d'ouverture n'est pas remplie");
+            }
+
+            // date de fermeture doit bien sûr être supérieure à la date d'ouverture
+            if ($form->get('date_ouverture')->getData() != '' && $form->get('date_ouverture')->getData() >= $form->get('date_fermeture')->getData()) {
+                throw $this->createNotFoundException("La date de fermeture ne peux pas être antérieure à la date d'ouverture");
+            }
+
             $em = $doctrine->getManager();
             $em->persist($espace);
             $em->flush();
@@ -48,6 +59,17 @@ class EspaceController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+
+            // La date de fermeture ne doit être remplie que si la date d’ouverture est également remplie
+            if ($form->get('date_ouverture')->getData() == '' && $form->get('date_fermeture')->getData() != '') {
+                throw $this->createNotFoundException("Tu ne peux pas mettre de date de fermeture si la date d'ouverture n'est pas rempli");
+            }
+
+            // La date de fermeture doit bien sûr être supérieure à la date d'ouverture
+            if ($form->get('date_ouverture')->getData() != "" && $form->get('date_ouverture')->getData() >= $form->get('date_fermeture')->getData()) {
+                throw $this->createNotFoundException("La date de fermeture ne peux pas être antérieure à la date d'ouverture");
+            }
+
             $em = $doctrine->getManager();
             $em->persist($espace);
             $em->flush();

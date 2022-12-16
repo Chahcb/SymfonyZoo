@@ -45,6 +45,9 @@ class Animal
     #[ORM\JoinColumn(nullable: false)]
     private ?Enclos $Enclos = null;
 
+    #[ORM\Column]
+    private ?bool $sterilise = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -166,6 +169,18 @@ class Animal
     public function setEnclos(?Enclos $Enclos): self
     {
         $this->Enclos = $Enclos;
+
+        return $this;
+    }
+
+    public function isSterilise(): ?bool
+    {
+        return $this->sterilise;
+    }
+
+    public function setSterilise(bool $sterilise): self
+    {
+        $this->sterilise = $sterilise;
 
         return $this;
     }

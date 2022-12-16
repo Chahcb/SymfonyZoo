@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\Animal;
 use App\Entity\Enclos;
 use App\Entity\Espace;
 use App\Form\EnclosSupprimerType;
@@ -54,6 +55,7 @@ class EnclosController extends AbstractController
     #[Route('/enclos/modifier/{id}', name: 'enclos_modifier')]
     public function modifierEnclos($id, ManagerRegistry $doctrine, Request $request)
     {
+        $animaux = $doctrine->getRepository(Animal::class)->findBy(array('Enclos' => $id));
         $enclos = $doctrine->getRepository(Enclos::class)->find($id);
 
         if (!$enclos) {
@@ -64,6 +66,17 @@ class EnclosController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+
+            // l'enclos est placé en quarantaine, alors tous les animaux qu’il contient sont mis en quarantaine
+            if ($form->get('quarantaine')->getData()) {
+                foreach ($animaux as $a) {
+                    $a->setQuarantaine(True);
+                    $em = $doctrine->getManager();
+                    $em->persist($a);
+                    $em->flush();
+                }
+            }
+
             $em = $doctrine->getManager();
             $em->persist($enclos);
             $em->flush();
@@ -79,10 +92,16 @@ class EnclosController extends AbstractController
     #[Route('/enclos/supprimer/{id}', name: 'enclos_supprimer')]
     public function supprimerEnclos($id, ManagerRegistry $doctrine, Request $request)
     {
+        $animaux = $doctrine->getRepository(Animal::class)->findBy(array('Enclos' => $id));
         $enclos = $doctrine->getRepository(Enclos::class)->find($id);
 
         if (!$enclos) {
             throw $this->createNotFoundException("Aucun enclos avec l'id $id");
+        }
+
+        // si l'enclos n'est vide pas vide on peut pas le supprimer
+        if (count($animaux) != 0) {
+            throw $this->createNotFoundException("L'enclos n'est pas vide");
         }
 
         $form = $this->createForm(EnclosSupprimerType::class, $enclos);
