@@ -60,12 +60,12 @@ class EspaceController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
 
-            // date de fermeture ne doit être remplie que si la date d’ouverture est également remplie
+            // La date de fermeture ne doit être remplie que si la date d’ouverture est également remplie
             if ($form->get('date_ouverture')->getData() == '' && $form->get('date_fermeture')->getData() != '') {
                 throw $this->createNotFoundException("Tu ne peux pas mettre de date de fermeture si la date d'ouverture n'est pas rempli");
             }
 
-            // date de fermeture doit bien sûr être supérieure à la date d'ouverture
+            // La date de fermeture doit bien sûr être supérieure à la date d'ouverture
             if ($form->get('date_ouverture')->getData() != "" && $form->get('date_ouverture')->getData() >= $form->get('date_fermeture')->getData()) {
                 throw $this->createNotFoundException("La date de fermeture ne peux pas être antérieure à la date d'ouverture");
             }

@@ -43,27 +43,25 @@ class AnimalController extends AbstractController
     #[Route('/animal/ajouter', name: 'animal_ajouter')]
     public function ajouterAnimal(ManagerRegistry $doctrine, Request $request)
     {
-        // TODO : numéro d’identification a toujours exactement 14 chiffres
-
         $animal = new Animal();
         $form = $this->createForm(AnimalType::class, $animal);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
 
-            // date de naissance ne doit pas être supérieure à la date d’arrivée au zoo
+            // la date de naissance ne doit pas être supérieure à la date d’arrivée au zoo
             if ($form->get('date_naissance')->getData() >= $form->get('date_arrivee')->getData()) {
-                throw $this->createNotFoundException("date de naissance doit être antérieure à la date d’arrivée");
+                throw $this->createNotFoundException("La date de naissance doit être antérieure à la date d’arrivée");
             }
 
-            // date de départ doit être supérieure à la date d’arrivée
+            // la date de départ doit être supérieure à la date d’arrivée au zoo
             if ($form->get('date_depart')->getData() <= $form->get('date_arrivee')->getData()) {
-                throw $this->createNotFoundException("date de départ doit être antérieure à la date d’arrivée");
+                throw $this->createNotFoundException("date de départ doit être supérieure à la date d’arrivée");
             }
 
-            // on ne peut pas stérilisé l'animal si son sexe est non déterminé
+            // on ne peut pas stérilisé l'animal si son sexe est indéterminé
             if ($form->get('sexe')->getData() == 'non déterminé' && $form->get('sterilise')->getData()) {
-                throw $this->createNotFoundException("Tu ne peux pas stérilisé l'animal si son son sexe est indéterminé");
+                throw $this->createNotFoundException("Tu ne peux pas stériliser l'animal si son sexe est indéterminé");
             }
 
             $animaux = $doctrine->getRepository(Animal::class)->findBy(array('Enclos' => $form->get('Enclos')->getData()));
@@ -102,19 +100,19 @@ class AnimalController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
 
-            // date de naissance ne doit pas être supérieure à la date d’arrivée au zoo
+            // la date de naissance ne doit pas être supérieure à la date d’arrivée au zoo
             if ($form->get('date_naissance')->getData() >= $form->get('date_arrivee')->getData()) {
-                throw $this->createNotFoundException("date de naissance doit être antérieure à la date d’arrivée");
+                throw $this->createNotFoundException("La date de naissance doit être antérieure à la date d’arrivée");
             }
 
-            // date de départ doit être supérieure à la date d’arrivée
+            // la date de départ doit être supérieure à la date d’arrivée au zoo
             if ($form->get('date_depart')->getData() <= $form->get('date_arrivee')->getData()) {
-                throw $this->createNotFoundException("date de départ doit être antérieure à la date d’arrivée");
+                throw $this->createNotFoundException("La date de départ doit être supérieure à la date d’arrivée");
             }
 
-            // on ne peut pas stérilisé l'animal si son sexe est non déterminé
+            // on ne peut pas stérilisé l'animal si son sexe est indéterminé
             if ($form->get('sexe')->getData() == 'non déterminé' && $form->get('sterilise')->getData()) {
-                throw $this->createNotFoundException("Tu ne peux pas stérilisé l'animal si son son sexe est indéterminé");
+                throw $this->createNotFoundException("Tu ne peux pas steriliser l'animal si son son sexe est indéterminé");
             }
 
             $em = $doctrine->getManager();
