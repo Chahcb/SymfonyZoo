@@ -22,6 +22,18 @@ class AnimalController extends AbstractController
             throw $this->createNotFoundException("Aucun enclos avec l'id $idEnclos");
         }
 
+        // on verifie si les animaux de l'enclos sont en quarantaine
+        // 1 => True et 0 => False
+        // si oui alors l'enclos reste en quarantaine sinon il ne l'est plus
+        $animauxQuarantaine = count($enclos->getAnimal()->filter(fn($animal) => $animal->isQuarantaine() == 1));
+
+        if ($animauxQuarantaine == 0) {
+            $enclos->setQuarantaine(False);
+            $ema = $doctrine->getManager();
+            $ema->persist($enclos);
+            $ema->flush();
+        }
+
         return $this->render('animaux/index.html.twig', [
             'enclos' => $enclos,
             'animaux' => $enclos->getAnimal()
